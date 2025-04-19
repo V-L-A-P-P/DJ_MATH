@@ -1,3 +1,4 @@
+import os
 import random
 import copy
 from aiogram.types import FSInputFile
@@ -10,23 +11,25 @@ TASKS_DICT = {
     '14' : '14',
     '18' : '18'
 }
+
+now_dir = os.path.dirname(__file__).replace("\\", "/")
+
 def get_tasks_list(category):
     standard_category= TASKS_DICT[category]
     with open(
-            f'src/math_bot/teacher/tasks/{standard_category}/list{standard_category}.txt',
+            f'{now_dir}/tasks/{standard_category}/list{standard_category}.txt',
             'r', encoding='utf8') as f:
-    #with open(f'{TO_ROOT_PATH}JenshenBOT\\src\\math_bot\\teacher\\tasks\\{standard_category}\\list{standard_category}.txt', 'r', encoding='utf8') as f:
         tasks_list = f.read().split()
         random.shuffle(tasks_list)
         return tasks_list
 
 def get_task_image_by_num(category, task_id):
     standard_category = TASKS_DICT[category]
-    return FSInputFile(f'src\\math_bot\\teacher\\tasks\\{standard_category}\\{task_id}.jpg')
+    return FSInputFile(f'{now_dir}/tasks/{standard_category}/images/{task_id}.jpg')
 
 def get_answers(category):
     standard_category = TASKS_DICT[category]
-    with open(f'src\\math_bot\\teacher\\tasks\\{standard_category}\\list{standard_category}_answers.txt', 'r', encoding='utf8') as f:
+    with open(f'{now_dir}/tasks/{standard_category}/list{standard_category}_answers.txt', 'r', encoding='utf8') as f:
         ans_dict = {}
         for s in f:
             key, value = s.split(' @ ')
