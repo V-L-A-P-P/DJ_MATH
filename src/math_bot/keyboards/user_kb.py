@@ -10,6 +10,7 @@ def get_user_main_menu_kb(*, sizes: tuple[int] = (1,)):
     keyboard = InlineKeyboardBuilder()
     btns = {
         "Решать задачи 🤓": "catalog",
+        "Теория 📚": "theory",
         "О нас ℹ️": "about"
     }
 

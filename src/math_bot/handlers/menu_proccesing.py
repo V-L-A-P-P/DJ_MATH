@@ -16,6 +16,9 @@ async def get_about_menu():
     kbds = user_kb.get_about_menu_kb()
     return banner_path, kbds
 
+async def get_theory_doc():
+    return '/docs/theory.pdf'
+
 async def get_task_menu(is_first_task=False, is_last_task=False):
     return user_kb.get_for_task_kb(is_first_task=is_first_task, is_last_task=is_last_task)
 

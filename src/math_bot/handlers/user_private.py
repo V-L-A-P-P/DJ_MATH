@@ -64,6 +64,12 @@ async def user_menu(callback: types.CallbackQuery, callback_data: MenuCallBack, 
             reply_markup=reply_markup)
         await callback.answer()
         await state.set_state(CleintState.reading_about)
+    elif callback_data.button_tag == 'theory':
+        print(f'*{callback.from_user.id} нажал кнопку "Теория" из главного меню*')
+        now_dir = os.path.dirname(__file__).replace("\\", "/")
+        path = now_dir + "/docs/theory.pdf"
+        document = FSInputFile(path=path, filename="Теория(тестовая часть).pdf")
+        await callback.message.bot.send_document(chat_id=callback.from_user.id, document=document)
 
 @user_private_router.callback_query(MenuCallBack.filter(), CleintState.category_choosing)
 async def categories_menu(callback: types.CallbackQuery, callback_data: MenuCallBack, state: FSMContext):
