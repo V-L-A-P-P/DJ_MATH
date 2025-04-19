@@ -7,6 +7,7 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import InputMediaPhoto, FSInputFile
 from pprint import pprint
 from src.math_bot.handlers import menu_proccesing
+import os
 
 
 class CleintState(StatesGroup):
@@ -20,9 +21,10 @@ user_private_router = Router()
 
 @user_private_router.message(CommandStart())
 async def start_cmd(message: types.Message, state: FSMContext):
-    print(f'*{message.from_user.id} нажал кнопку старта*')
+    print(f'*{message.from_user.id} {message.from_user.username} нажал кнопку старта*')
     image_path, reply_markup = await menu_proccesing.get_main_menu()
-    await message.answer_photo(types.FSInputFile(path=image_path), reply_markup=reply_markup)
+    now_dir = os.path.dirname(__file__).replace("\\", "/")
+    await message.answer_photo(types.FSInputFile(path=now_dir + image_path), reply_markup=reply_markup)
     await state.set_state(CleintState.main_menu_choosing)
 
 
@@ -32,7 +34,8 @@ async def user_menu(callback: types.CallbackQuery, callback_data: MenuCallBack, 
     if callback_data.button_tag == 'catalog':
         print(f'*{callback.from_user.id} нажал кнопку "Решать задачи" из главного меню*')
         image_path, reply_markup = await menu_proccesing.get_categories_menu()
-        await callback.message.edit_media(media=InputMediaPhoto(media=FSInputFile(image_path), caption='Выберите тип задач: '), reply_markup=reply_markup)
+        now_dir = os.path.dirname(__file__).replace("\\", "/")
+        await callback.message.edit_media(media=InputMediaPhoto(media=FSInputFile(now_dir+image_path), caption='Выберите тип задач: '), reply_markup=reply_markup)
         await callback.answer()
         await state.set_state(CleintState.category_choosing)
     elif callback_data.button_tag == 'about':
@@ -47,8 +50,9 @@ async def user_menu(callback: types.CallbackQuery, callback_data: MenuCallBack, 
                                                                          '+79262305879 📞', parse_mode= 'Markdown'),
             reply_markup=reply_markup)
         '''
+        now_dir = os.path.dirname(__file__).replace("\\", "/")
         await callback.message.edit_media(
-            media=InputMediaPhoto(media=FSInputFile(image_path), caption='*Что умеет бот?*\n'
+            media=InputMediaPhoto(media=FSInputFile(now_dir + image_path), caption='*Что умеет бот?*\n'
                                                                          '✅Присылать задачи по разным темам\n'
                                                                          '✅Показывать правильные ответы\n'
                                                                          '✅ Показывать решения и пояснения\n'
@@ -67,8 +71,9 @@ async def categories_menu(callback: types.CallbackQuery, callback_data: MenuCall
     if callback_data.button_tag == 'mainmenu':
         print(f'*{callback.from_user.id} нажал кнопку "В главное меню" из меню категорий*')
         image_path, reply_markup = await menu_proccesing.get_main_menu()
+        now_dir = os.path.dirname(__file__).replace("\\", "/")
         await callback.message.edit_media(
-            media=InputMediaPhoto(media=FSInputFile(image_path)),
+            media=InputMediaPhoto(media=FSInputFile(now_dir + image_path)),
             reply_markup=reply_markup)
         await callback.answer()
         await state.set_state(CleintState.main_menu_choosing)
@@ -89,8 +94,9 @@ async def categories_menu(callback: types.CallbackQuery, callback_data: MenuCall
     if callback_data.button_tag == 'mainmenu':
         print(f'*{callback.from_user.id} нажал кнопку "В главное меню" из меню решения задач*')
         image_path, reply_markup = await menu_proccesing.get_main_menu()
+        now_dir = os.path.dirname(__file__).replace("\\", "/")
         await callback.message.edit_media(
-            media=InputMediaPhoto(media=FSInputFile(image_path)),
+            media=InputMediaPhoto(media=FSInputFile(now_dir + image_path)),
             reply_markup=reply_markup)
         await callback.answer()
         await state.set_state(CleintState.main_menu_choosing)
@@ -123,13 +129,19 @@ async def categories_menu(callback: types.CallbackQuery, callback_data: MenuCall
 @user_private_router.callback_query(MenuCallBack.filter())
 async def user_menu(callback: types.CallbackQuery, callback_data: MenuCallBack, state: FSMContext):
     print(f'!!! {callback.from_user.id} return to main menu')
+
     if callback_data.button_tag == 'mainmenu':
         image_path, reply_markup = await menu_proccesing.get_main_menu()
+        now_dir = os.path.dirname(__file__).replace("\\", "/")
         await callback.message.edit_media(
-            media=InputMediaPhoto(media=FSInputFile(image_path)),
+            media=InputMediaPhoto(media=FSInputFile(now_dir + image_path)),
             reply_markup=reply_markup)
         await callback.answer()
-        await state.set_state(CleintState.main_menu_choosing)
+    await state.set_state(CleintState.main_menu_choosing)
+
+if __name__ == '__main__':
+    print(__file__)
+    print(InputMediaPhoto(media=FSInputFile('src/math_bot/handlers/main_banner.jpg')))
 
 
 
