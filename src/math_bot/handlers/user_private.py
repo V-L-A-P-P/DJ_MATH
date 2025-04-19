@@ -67,7 +67,7 @@ async def user_menu(callback: types.CallbackQuery, callback_data: MenuCallBack, 
     elif callback_data.button_tag == 'theory':
         print(f'*{callback.from_user.id} нажал кнопку "Теория" из главного меню*')
         now_dir = os.path.dirname(__file__).replace("\\", "/")
-        path = now_dir + "/docs/theory.pdf"
+        path = now_dir + await menu_proccesing.get_theory_doc()
         document = FSInputFile(path=path, filename="Теория(тестовая часть).pdf")
         await callback.message.bot.send_document(chat_id=callback.from_user.id, document=document)
 
