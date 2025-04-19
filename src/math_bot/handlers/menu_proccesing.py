@@ -2,17 +2,17 @@ from src.math_bot.keyboards import user_kb
 
 
 async def get_main_menu():
-    banner_path = 'src/math_bot/handlers/main_banner.jpg'
+    banner_path = '/banners/main_banner.jpg'
     kbds = user_kb.get_user_main_menu_kb()
     return banner_path, kbds
 
 async def get_categories_menu():
-    banner_path = 'src/math_bot/handlers/categories_banner.jpg'
+    banner_path = '/banners/categories_banner.jpg'
     kbds = user_kb.get_categories_menu_kb()
     return banner_path, kbds
 
 async def get_about_menu():
-    banner_path = 'src/math_bot/handlers/about_banner.jpg'
+    banner_path = '/banners/about_banner.jpg'
     kbds = user_kb.get_about_menu_kb()
     return banner_path, kbds
 
